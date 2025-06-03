@@ -14,7 +14,6 @@ export class Main implements OnInit{
   }
   bazaurl = "https://isi-paas-blog.onrender.com/"
   danein: any[] = []
-  user: string = "";
   tytul: string = "";
   zawartosc: string = "";
   AxiosGet = async () => {
@@ -35,7 +34,6 @@ export class Main implements OnInit{
       baseURL: this.bazaurl
     });
     const dane = {
-      owner: this.user,
       tytul: this.tytul,
       zawartosc: this.zawartosc
     }
@@ -50,11 +48,32 @@ export class Main implements OnInit{
     }
   }
 
+   AxiosDelete = async (id: number) => {
+    let client = axios.create({
+      baseURL: this.bazaurl
+    });
+    try {
+      const response = await client.delete(`/del-db?id=${id}`);
+    console.log(response.status)
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
   async Dodaj(){
     console.log("dodaj dodaje")
-    if(this.user != "" && this.tytul != "" && this.zawartosc != "")
+    if(this.tytul != "" && this.zawartosc != "")
       {
       await this.AxiosPost()
+    }
+    this.AxiosGet()
+  }
+
+  async Usun( id: number){
+    console.log("usun usuwa")
+    if(id)
+      {
+      await this.AxiosDelete(id)
     }
     this.AxiosGet()
   }

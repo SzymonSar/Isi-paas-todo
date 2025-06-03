@@ -38,14 +38,13 @@ const pool = new Pool({
 
 app.get('/get-db', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * from blog');
+    const result = await pool.query('SELECT * from todo');
     res.send(result.rows);
   } catch (err) {
     console.log('Tablica nie istnieje, tworze tablice')
     try{
-      const result = await pool.query(`CREATE TABLE blog (
+      const result = await pool.query(`CREATE TABLE todo (
          id SERIAL PRIMARY KEY,
-         owner TEXT NOT NULL,
          tytul TEXT NOT NULL,
          zawartosc TEXT NOT NULL
          );`)
@@ -60,12 +59,29 @@ app.get('/get-db', async (req, res) => {
 app.post('/add-db', async (req, res) => {
   const { owner, tytul, zawartosc } = req.body;
   if (!owner || !tytul || !zawartosc) {
-    return res.status(400).send('Brakuje danych: owner, tytul lub zawartosc');
+    return res.status(400).send('Brakuje danych: tytul lub zawartosc');
   }
     try{
-      const result = await pool.query('INSERT INTO blog (owner, tytul, zawartosc) VALUES ($1, $2, $3)',
-      [owner, tytul, zawartosc])
+      const result = await pool.query('INSERT INTO blog (tytul, zawartosc) VALUES ($1, $2)',
+      [tytul, zawartosc])
       res.status(200).send("przedmiot zostal dodany");
+    }catch(err){
+    console.error('Błąd zapytania:', err);
+    res.status(500).send('Błąd połączenia z bazą danych');
+    }
+});
+
+app.delete('/del-db', async (req, res) => {
+  const id = req.query.id;
+  if (!owner || !tytul || !zawartosc) {
+    return res.status(400).send('Brakuje danych: tytul lub zawartosc');
+  }
+    try{
+      const result = await pool.query('DELETE FROM todo WHERE id = $1', [id])
+      if (result.rowCount === 0) {
+      return res.status(404).send('Rekord nie znaleziony');
+      }
+      res.status(200).send("przedmiot zostal usuniety");
     }catch(err){
     console.error('Błąd zapytania:', err);
     res.status(500).send('Błąd połączenia z bazą danych');
