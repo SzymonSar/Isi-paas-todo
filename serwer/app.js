@@ -57,8 +57,8 @@ app.get('/get-db', async (req, res) => {
 });
 
 app.post('/add-db', async (req, res) => {
-  const { owner, tytul, zawartosc } = req.body;
-  if (!owner || !tytul || !zawartosc) {
+  const { tytul, zawartosc } = req.body;
+  if (!tytul || !zawartosc) {
     return res.status(400).send('Brakuje danych: tytul lub zawartosc');
   }
     try{
