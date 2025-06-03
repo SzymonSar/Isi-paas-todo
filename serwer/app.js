@@ -62,7 +62,7 @@ app.post('/add-db', async (req, res) => {
     return res.status(400).send('Brakuje danych: tytul lub zawartosc');
   }
     try{
-      const result = await pool.query('INSERT INTO blog (tytul, zawartosc) VALUES ($1, $2)',
+      const result = await pool.query('INSERT INTO todo (tytul, zawartosc) VALUES ($1, $2)',
       [tytul, zawartosc])
       res.status(200).send("przedmiot zostal dodany");
     }catch(err){
