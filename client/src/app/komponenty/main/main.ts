@@ -12,7 +12,7 @@ export class Main implements OnInit{
   ngOnInit(): void {
     this.AxiosGet();
   }
-  bazaurl = "https://isi-paas-blog.onrender.com/"
+  bazaurl = "https://isi-paas-todo-serwer.onrender.com/"
   danein: any[] = []
   tytul: string = "";
   zawartosc: string = "";
